@@ -2,7 +2,9 @@ package com.example.finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +15,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 
 public class MainActivity extends AppCompatActivity {
+
+    public GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Styling button
         SignInButton signInButton = findViewById(R.id.sign_in_button);
@@ -36,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.sign_in_button).setOnClickListener((View.OnClickListener) this);
 
     }
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -45,17 +47,27 @@ public class MainActivity extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        if (account) {
-            // Previously signed in user
-            //do something
-        }
+//        if account, user currently signed in
+//        if (account) {
+//            // Previously signed in user
+//            //do something
+//        }
 
-        if
     }
-
-    // function that handles data from google auth
-    // name, email, google_id
-    void googleAuth() {
-        // creo que ni necesito esto, mas bien its handles in the activity lifecycle methods
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+//            case R.id.sign_in_button:
+//                signIn();
+//                break;
+//            // ...
+//            Log.d("onClick:", Integer.toString(v.getId()));
+        }
+    }
+    private void signIn() {
+        // 1. send data to server
+        // 2. change to home Activity
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 }
