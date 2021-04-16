@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import cz.msebera.android.httpclient.Header;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +14,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int RC_SIGN_IN = 1;
     public GoogleSignInClient mGoogleSignInClient;
+    private String BASE_URL = "";
+    private static AsyncHttpClient client = new AsyncHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,42 +43,95 @@ public class MainActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Styling button
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
 
         // Register button's on click listener
-        findViewById(R.id.sign_in_button).setOnClickListener((View.OnClickListener) this);
+        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.sign_in_button:
+                        signIn();
+                        break;
+                }
+            }
+        });
 
     }
+
     @Override
     protected void onStart() {
         super.onStart();
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
-//        if account, user currently signed in
-//        if (account) {
-//            // Previously signed in user
-//            //do something
-//        }
+        updateUI(account);
 
     }
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-//            case R.id.sign_in_button:
-//                signIn();
-//                break;
-//            // ...
-//            Log.d("onClick:", Integer.toString(v.getId()));
+
+    public void updateUI( GoogleSignInAccount accountInput) {
+        if (accountInput != null) {
+            // user already signed in
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(intent);
+        } else {
+            // Should stay in page (maybe refresh?)
+            Log.d("error:", "in updatdateUI null for account");
         }
     }
+    
     private void signIn() {
-        // 1. send data to server
-        // 2. change to home Activity
+        // 1. change to home Activity
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Send info to backend
+            String name = account.getDisplayName();
+            String email = account.getEmail();
+            String google_id = account.getId();
+
+            // Send POST request to Backend
+            RequestParams params = new RequestParams();
+            params.put("name", name);
+            params.put("email", email);
+            params.put("google_id", google_id);
+
+            client.post(BASE_URL, params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    // POST request successful
+                    updateUI(account);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Log.e("api error", new String(responseBody));
+                    updateUI(null);
+                }
+            });
+
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.d("signInResult:failed", "error in handleSignInResult");
+            updateUI(null);
+        }
+    }
 }
+
+//}
