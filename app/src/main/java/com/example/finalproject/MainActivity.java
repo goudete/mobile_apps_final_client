@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 1;
     public GoogleSignInClient mGoogleSignInClient;
-    private String BASE_URL = "";
+    private String BASE_URL = "http://10.0.2.2/auth";
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     @Override
@@ -71,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         if (accountInput != null) {
             // user already signed in
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            intent.putExtra("name", accountInput.getDisplayName());
+            intent.putExtra("email", accountInput.getEmail());
+            intent.putExtra("google_id", accountInput.getId());
             startActivity(intent);
         } else {
             // Should stay in page (maybe refresh?)
@@ -111,16 +114,19 @@ public class MainActivity extends AppCompatActivity {
             params.put("email", email);
             params.put("google_id", google_id);
 
+//            updateUI(account);
+            Log.d("PRE POST", "HERE");
             client.post(BASE_URL, params, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    Log.d("POST REQUEST", "SUCCESS");
                     // POST request successful
                     updateUI(account);
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                    Log.e("api error", new String(responseBody));
+//                    Log.e("api error", new String(responseBody));
                     updateUI(null);
                 }
             });
@@ -133,5 +139,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-//}
