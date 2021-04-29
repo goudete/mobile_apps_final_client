@@ -20,7 +20,9 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,18 +64,19 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        updateUI(account);
 
     }
 
-    public void updateUI( GoogleSignInAccount accountInput) {
+    public void updateUI( GoogleSignInAccount accountInput, String user_id) {
         if (accountInput != null) {
             // user already signed in
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             intent.putExtra("name", accountInput.getDisplayName());
             intent.putExtra("email", accountInput.getEmail());
             intent.putExtra("google_id", accountInput.getId());
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         } else {
             // Should stay in page (maybe refresh?)
@@ -114,20 +117,26 @@ public class MainActivity extends AppCompatActivity {
             params.put("email", email);
             params.put("google_id", google_id);
 
-//            updateUI(account);
             Log.d("PRE POST", "HERE");
             client.post(BASE_URL, params, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     Log.d("POST REQUEST", "SUCCESS");
                     // POST request successful
-                    updateUI(account);
+                    try {
+                        JSONArray responseObj = new JSONArray(String.valueOf(responseBody));
+                        int user_id = responseObj.getInt("id");
+                        updateUI(account, Integer.toString(user_id));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 //                    Log.e("api error", new String(responseBody));
-                    updateUI(null);
+                    updateUI(null, null);
                 }
             });
 
@@ -135,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.d("signInResult:failed", "error in handleSignInResult");
-            updateUI(null);
+            updateUI(null, null);
         }
     }
 }

@@ -11,7 +11,9 @@ import com.google.android.gms.tasks.Task;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +21,12 @@ import androidx.appcompat.app.AppCompatActivity;
 public class HomeActivity extends AppCompatActivity {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
-    private String BASE_URL = "http://10.0.2.2/getAllLocations";
+    private String BASE_URL = "http://10.0.2.2/getLocationsByUser/";
+    public String LOCATIONS_URL;
+    public String google_id;
+    public String email;
+    public String name;
+    public String user_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,24 +34,33 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra("name");
-        String email = intent.getStringExtra("email");
-        String google_id = intent.getStringExtra("google_id");
+        name = intent.getStringExtra("name");
+        email = intent.getStringExtra("email");
+        google_id = intent.getStringExtra("google_id");
+        user_id = intent.getStringExtra("user_id");
+
+        Log.d("USER ID:", user_id);
+        getLocations();
     }
 
     void getLocations() {
-        // Need to get user Id
+        LOCATIONS_URL = BASE_URL += user_id;
         client.addHeader("Accept", "application/json");
-        client.get(BASE_URL, new AsyncHttpResponseHandler() {
+        client.get(LOCATIONS_URL, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 Log.d("api response", new String(responseBody));
                 // Get info
-                // Display in recycler view
-                Log.d("REQUEST", "SUCCESS");
+                try {
+                    JSONArray responseArr = new JSONArray(String.valueOf(responseBody));
 
+                    // Display in recycler view
+                    Log.d("LOCATION REQUEST", "SUCCESS");
+                    System.out.print(responseBody);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
             @Override
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
                 Log.e("api error", new String(responseBody));
