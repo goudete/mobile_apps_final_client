@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Final Project</string>
+    <string name="recycler_title">My Locations</string>
 </resources>
