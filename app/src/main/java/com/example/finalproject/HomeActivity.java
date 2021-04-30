@@ -39,7 +39,6 @@ public class HomeActivity extends AppCompatActivity {
         google_id = intent.getStringExtra("google_id");
         user_id = intent.getStringExtra("user_id");
 
-        Log.d("USER ID:", user_id);
         getLocations();
     }
 
@@ -49,14 +48,13 @@ public class HomeActivity extends AppCompatActivity {
         client.get(LOCATIONS_URL, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                Log.d("api response", new String(responseBody));
-                // Get info
                 try {
-                    JSONArray responseArr = new JSONArray(String.valueOf(responseBody));
+
+                    JSONObject responseObj = new JSONObject(new String(responseBody));
+                    JSONArray locationsArr = responseObj.getJSONArray("locations");
+
 
                     // Display in recycler view
-                    Log.d("LOCATION REQUEST", "SUCCESS");
-                    System.out.print(responseBody);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

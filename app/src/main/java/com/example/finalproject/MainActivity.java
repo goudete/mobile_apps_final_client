@@ -124,8 +124,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("POST REQUEST", "SUCCESS");
                     // POST request successful
                     try {
-                        JSONArray responseObj = new JSONArray(String.valueOf(responseBody));
-                        int user_id = responseObj.getInt("id");
+                        JSONObject responseObj = new JSONObject( new String(responseBody));
+                        JSONObject responseBodyObject = responseObj.getJSONObject("body");
+                        int user_id = responseBodyObject.getInt("id");
+
                         updateUI(account, Integer.toString(user_id));
 
                     } catch (JSONException e) {
