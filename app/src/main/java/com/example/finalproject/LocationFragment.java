@@ -3,11 +3,8 @@ package com.example.finalproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -17,12 +14,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HomeActivity extends AppCompatActivity {
+public class LocationFragment extends Fragment {
+
+    public LocationFragment() {
+        //set data here
+        super(R.layout.activity_locations);
+    }
 
     private static AsyncHttpClient client = new AsyncHttpClient();
     private String BASE_URL = "http://10.0.2.2/getLocationsByUser/";
@@ -34,24 +37,23 @@ public class HomeActivity extends AppCompatActivity {
     public String name;
     public String user_id;
 
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         //Look up recycler view
-        recyclerView = findViewById(R.id.recyclyer_view);
+        recyclerView = view.findViewById(R.id.recyclyer_view);
         locations = new ArrayList<>();
 
-        Intent intent = getIntent();
-        name = intent.getStringExtra("name");
-        email = intent.getStringExtra("email");
-        google_id = intent.getStringExtra("google_id");
-        user_id = intent.getStringExtra("user_id");
+        // Receive following info through bundle
+        name = this.getArguments().getString("name");
+        email = this.getArguments().getString("email");
+        google_id = this.getArguments().getString("google_id");
+        user_id = this.getArguments().getString("user_id");
 
         getLocations();
-    }
 
+    }
     void getLocations() {
         LOCATIONS_URL = BASE_URL += user_id;
         client.addHeader("Accept", "application/json");
@@ -75,7 +77,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-
     void setRecyclerView(JSONArray data) throws JSONException {
         for (int i = 0; i < data.length(); i++) {
 
@@ -91,12 +92,11 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         // Display in recycler view
-        //create beer adapter to pass in data
-        LocationAdapter adapter = new LocationAdapter(this, locations);
+        LocationAdapter adapter = new LocationAdapter(locations);
         //attach the adapter to recycler view to populate
         recyclerView.setAdapter(adapter);
         //layout manager
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getView().getContext()));
 
     }
 }

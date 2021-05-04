@@ -7,20 +7,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,15 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateUI( GoogleSignInAccount accountInput, String user_id) {
         if (accountInput != null) {
-            // user already signed in
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            // user signed in
+            Intent intent = new Intent(MainActivity.this, NavActivity.class);
             intent.putExtra("name", accountInput.getDisplayName());
             intent.putExtra("email", accountInput.getEmail());
             intent.putExtra("google_id", accountInput.getId());
             intent.putExtra("user_id", user_id);
             startActivity(intent);
         } else {
-            // Should stay in page (maybe refresh?)
             Log.d("error:", "in updatdateUI null for account");
         }
     }

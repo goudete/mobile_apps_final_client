@@ -15,9 +15,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     List<Location> locations;
     Context mContext;
 
-    public LocationAdapter(Context context, List<Location> locations) {
+    public LocationAdapter(List<Location> locations) {
         this.locations = locations;
-        mContext = context;
     }
 
     @NonNull

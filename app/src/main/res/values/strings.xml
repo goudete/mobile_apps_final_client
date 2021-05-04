@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Final Project</string>
     <string name="recycler_title">My Locations</string>
+    <string name="character_btn">Profile</string>
+    <string name="location_btn">New</string>
+    <string name="episode_btn">Search</string>
+
 </resources>
