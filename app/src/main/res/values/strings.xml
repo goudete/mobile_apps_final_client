@@ -4,5 +4,7 @@
     <string name="character_btn">Profile</string>
     <string name="location_btn">New</string>
     <string name="episode_btn">Search</string>
+    <string name="submit_button">Create Location</string>
+    <string name="create_location_title">New Location</string>
 
 </resources>

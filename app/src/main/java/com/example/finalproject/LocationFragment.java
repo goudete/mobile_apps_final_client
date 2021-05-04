@@ -1,6 +1,5 @@
 package com.example.finalproject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,18 +14,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class LocationFragment extends Fragment {
-
-    public LocationFragment() {
-        //set data here
-        super(R.layout.activity_locations);
-    }
-
     private static AsyncHttpClient client = new AsyncHttpClient();
     private String BASE_URL = "http://10.0.2.2/getLocationsByUser/";
     private ArrayList<Location> locations;
@@ -37,6 +29,10 @@ public class LocationFragment extends Fragment {
     public String name;
     public String user_id;
 
+    public LocationFragment() {
+        //set data here
+        super(R.layout.fragment_locations);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
