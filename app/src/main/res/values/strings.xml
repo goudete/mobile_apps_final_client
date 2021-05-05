@@ -7,6 +7,9 @@
     <string name="submit_button">Create Location</string>
     <string name="create_location_title">New Location</string>
     <string name="follow_button">Follow</string>
-    <string name="users_recycler_title">Users</string>
+    <string name="followees_recycler_title">Following</string>
+    <string name="followees_button">Following</string>
+    <string name="followers_button">Followers</string>
+    <string name="followers_recycler_title">Followers</string>
 
 </resources>

@@ -28,11 +28,18 @@
             android:text="@string/location_btn" />
 
         <Button
-            android:id="@+id/search_btn"
+            android:id="@+id/followees_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/episode_btn" />
+            android:text="@string/followees_button" />
+
+        <Button
+            android:id="@+id/followers_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/followers_button" />
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView

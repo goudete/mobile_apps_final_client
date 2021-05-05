@@ -18,32 +18,27 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-    /*
-        TWO QUESTIONS
-        - How to conditionally render?
-        - How to handle click?
-     */
 
-public class UsersFragment extends Fragment {
+public class FolloweesFragment extends Fragment {
     public String name;
     public String email;
     public String google_id;
     public String user_id;
-    private String BASE_URL = "http://10.0.2.2/getAllUsers/";
+    private String BASE_URL = "http://10.0.2.2/getFollowees/";
     private String USER_URL;
     private static AsyncHttpClient client = new AsyncHttpClient();
     private ArrayList<User> usersArr;
     private RecyclerView recyclerView;
 
 
-    public UsersFragment() {
-        super(R.layout.fragment_friends);
+    public FolloweesFragment() {
+        super(R.layout.fragment_followees);
     }
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         //Look up recycler view
-        recyclerView = view.findViewById(R.id.users_recycler_view);
+        recyclerView = view.findViewById(R.id.followees_recycler_view);
         usersArr = new ArrayList<>();
 
         // Receive following info through bundle
@@ -63,8 +58,9 @@ public class UsersFragment extends Fragment {
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 try {
                     JSONObject responseObj = new JSONObject(new String(responseBody));
-                    JSONArray usersArr = responseObj.getJSONArray("users");
-                    setRecyclerView(usersArr);
+                    JSONObject followees = responseObj.getJSONObject("followees");
+                    JSONArray followeesArr = followees.getJSONArray("followeeObjects");
+                    setRecyclerView(followeesArr);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

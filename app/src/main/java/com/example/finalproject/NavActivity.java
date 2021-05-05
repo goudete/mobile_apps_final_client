@@ -11,7 +11,8 @@ public class NavActivity extends AppCompatActivity {
 
     Button profile_btn;
     Button new_btn;
-    Button search_btn;
+    Button followees_btn;
+    Button followers_btn;
     public String google_id;
     public String email;
     public String name;
@@ -25,7 +26,9 @@ public class NavActivity extends AppCompatActivity {
         // Grabbing buttons
         profile_btn = findViewById(R.id.profile_btn);
         new_btn = findViewById(R.id.new_btn);
-        search_btn = findViewById(R.id.search_btn);
+        followees_btn = findViewById(R.id.followees_btn);
+        followers_btn = findViewById(R.id.followers_btn);
+
 
         // Grabbing sign in info
         Intent intent = getIntent();
@@ -48,10 +51,16 @@ public class NavActivity extends AppCompatActivity {
                 createNew();
             }
         });
-        search_btn.setOnClickListener(new View.OnClickListener() {
+        followees_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search();
+                followees();
+            }
+        });
+        followers_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                followers();
             }
         });
 
@@ -88,7 +97,7 @@ public class NavActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void search() {
+    public void followees() {
         Bundle bundle = new Bundle();
 
         bundle.putString("name", name);
@@ -99,7 +108,21 @@ public class NavActivity extends AppCompatActivity {
         // Load Fragment
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.fragContainer, UsersFragment.class, bundle)
+                .replace(R.id.fragContainer, FolloweesFragment.class, bundle)
+                .commit();
+    }
+    public void followers() {
+        Bundle bundle = new Bundle();
+
+        bundle.putString("name", name);
+        bundle.putString("email", email);
+        bundle.putString("google_id", google_id);
+        bundle.putString("user_id", user_id);
+
+        // Load Fragment
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragContainer, FollowersFragment.class, bundle)
                 .commit();
     }
 
