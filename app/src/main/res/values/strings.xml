@@ -2,9 +2,11 @@
     <string name="app_name">Final Project</string>
     <string name="recycler_title">My Locations</string>
     <string name="character_btn">Profile</string>
-    <string name="location_btn">New</string>
-    <string name="episode_btn">Search</string>
+    <string name="location_btn">New Location</string>
+    <string name="episode_btn">Users</string>
     <string name="submit_button">Create Location</string>
     <string name="create_location_title">New Location</string>
+    <string name="follow_button">Follow</string>
+    <string name="users_recycler_title">Users</string>
 
 </resources>

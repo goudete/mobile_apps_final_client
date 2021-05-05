@@ -11,11 +11,11 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
-    List<Location> locations;
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
+    List<User> users;
 
-    public LocationAdapter(List<Location> locations) {
-        this.locations = locations;
+    public UserAdapter(List<User> users) {
+        this.users = users;
     }
 
     @NonNull
@@ -26,10 +26,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         LayoutInflater inflater = LayoutInflater.from(context);
 
         //inflate custom layout
-        View locationView = inflater.inflate(R.layout.item_location, parent, false);
+        View userView = inflater.inflate(R.layout.item_user, parent, false);
 
         //return new view holder
-        ViewHolder viewHolder = new ViewHolder(locationView);
+        ViewHolder viewHolder = new ViewHolder(userView);
 
         return viewHolder;
     }
@@ -40,28 +40,25 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         // populate data into the item through view holder
 
         //grab data model aka location object
-        Location location = locations.get(position);
+        User user = users.get(position);
 
         //set the view based on the data and view names
-        holder.textView_name.setText(location.getLocationName());
-        holder.textView_description.setText(location.getDescription());
+        holder.textView_userName.setText(user.getUserName());
 
     }
 
     @Override
     public int getItemCount() {
         // returns total number of items in list
-        return locations.size();
+        return users.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView_name;
-        TextView textView_description;
+        TextView textView_userName;
 
         public ViewHolder (View itemView) {
             super(itemView);
-            textView_name = itemView.findViewById(R.id.textView_name);
-            textView_description = itemView.findViewById(R.id.textView_description);
+            textView_userName = itemView.findViewById(R.id.textView_userName);
         }
 
     }

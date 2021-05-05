@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import cz.msebera.android.httpclient.Header;
 
-public class CreateNewFragment extends Fragment {
+public class NewLocationFragment extends Fragment {
     public String name;
     public String email;
     public String google_id;
@@ -31,7 +31,7 @@ public class CreateNewFragment extends Fragment {
     private String URL = "http://10.0.2.2/createLocation";
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public CreateNewFragment() {
+    public NewLocationFragment() {
         //set data here
         super(R.layout.fragment_create_new);
     }
@@ -68,7 +68,6 @@ public class CreateNewFragment extends Fragment {
             Toast.makeText(getActivity(),"Please check your input and try again",Toast.LENGTH_SHORT).show();
             return;
         }
-
         postData(nameString, "helloworld", descriptionString, ratingString);
 
     }
@@ -89,6 +88,8 @@ public class CreateNewFragment extends Fragment {
         client.post(URL, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Log.d("Status Code", String.valueOf(statusCode));
+                Log.d("responseBody", new String(responseBody));
                 Toast.makeText(getActivity(),"SUCCESS",Toast.LENGTH_SHORT).show();
             }
 
